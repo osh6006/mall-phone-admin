@@ -1,4 +1,5 @@
 "use client";
+import axios from "axios";
 
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -16,13 +17,19 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { useState } from "react";
+
+import toast from "react-hot-toast";
 
 const formSchema = z.object({
-  name: z.string().min(1),
+  name: z.string().min(2, { message: "2글자 이상 입력해 주세요." }),
 });
 
 export const StoreModal = () => {
   const storeModal = useStoreModal();
+
+  const [loading, setLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -32,7 +39,15 @@ export const StoreModal = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // TODO : 스토어 만들기
-    console.log(values);
+    try {
+      setLoading(true);
+      const res = await axios.post("/api/stores", values);
+      window.location.assign(`/${res.data.id}`);
+    } catch (error) {
+      toast.error("서버 오류가 발생했습니다.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -51,19 +66,29 @@ export const StoreModal = () => {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>이름</FormLabel>
                     <FormControl>
-                      <Input placeholder="스토어 이름" {...field} />
+                      <Input
+                        disabled={loading}
+                        placeholder="스토어 이름"
+                        {...field}
+                      />
                     </FormControl>
-                    <FormMessage></FormMessage>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
               <div className="pt-6 space-x-3 flex items-center justify-end w-full">
-                <Button variant={"outline"} onClick={storeModal.onClose}>
+                <Button
+                  disabled={loading}
+                  variant={"outline"}
+                  onClick={storeModal.onClose}
+                >
                   취소
                 </Button>
-                <Button type="submit">확인</Button>
+                <Button disabled={loading} type="submit">
+                  확인
+                </Button>
               </div>
             </form>
           </Form>
