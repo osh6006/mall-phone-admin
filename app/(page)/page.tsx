@@ -9,7 +9,6 @@ export default function Home() {
 
   useEffect(() => {
     if (!isOpen) {
-      console.log(true);
       onOpen();
     }
   }, [isOpen, onOpen]);

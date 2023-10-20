@@ -22,6 +22,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={inter.className}>
+          {/* MODAL을 GLOBAL 하게 보여줌 */}
           <ModalProvider />
           {children}
         </body>
