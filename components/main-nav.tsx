@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { useParams, usePathname } from "next/navigation";
 
-import { LayoutDashboard, Settings } from "lucide-react";
+import { LayoutDashboard, Receipt, Settings } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -23,6 +23,12 @@ export function MainNav({
       icon: <LayoutDashboard className=" h-5 w-5" />,
     },
     {
+      href: `/${params.storeId}/billboards`,
+      label: "Billboards",
+      active: pathName === `/${params.storeId}/billboards`,
+      icon: <Receipt className=" h-5 w-5" />,
+    },
+    {
       href: `/${params.storeId}/settings`,
       label: "Settings",
       active: pathName === `/${params.storeId}/settings`,
@@ -37,9 +43,9 @@ export function MainNav({
           key={route.href}
           href={route.href}
           className={cn(
-            "flex items-center gap-2 text-base font-medium transition-colors hover:text-primary px-3 py-1",
+            "flex items-center gap-2 text-base font-medium transition-colors hover:text-primary px-3 py-2 border-2 border-transparent",
             route.active
-              ? "text-black dark:text-white border-2 rounded-sm"
+              ? "text-black dark:text-white border-inherit rounded-sm"
               : "text-muted-foreground "
           )}
         >

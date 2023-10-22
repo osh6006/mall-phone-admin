@@ -11,7 +11,7 @@ import axios from "axios";
 
 import toast from "react-hot-toast";
 
-import { Store } from "@prisma/client";
+import { BillBoard } from "@prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Trash } from "lucide-react";
@@ -30,18 +30,22 @@ import {
 import { Input } from "@/components/ui/input";
 import { AlertModal } from "@/components/modals/alert-modal";
 import { ApiAlert } from "@/components/ui/api-alert";
-
-interface SettingsFormProps {
-  initialData: Store;
-}
+import ImageUpload from "@/components/ui/image-upload";
 
 const formSchema = z.object({
-  name: z.string().min(2, { message: "2글자 이상 입력해 주세요." }),
+  label: z.string().min(2, { message: "2글자 이상 입력해 주세요." }),
+  imageUrl: z.string().min(1),
 });
 
-type SettingsFormValue = z.infer<typeof formSchema>;
+type BillboardFormValue = z.infer<typeof formSchema>;
 
-export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
+interface BillboardFormProps {
+  initialData: BillBoard | null;
+}
+
+export const BillboardForm: React.FC<BillboardFormProps> = ({
+  initialData,
+}) => {
   const params = useParams();
   const router = useRouter();
   const origin = useOrigin();
@@ -49,17 +53,36 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const form = useForm<SettingsFormValue>({
+  const title = initialData ? "빌보드 수정" : "빌보드 생성";
+  const description = initialData
+    ? "빌보드 수정해 보세요"
+    : "새 빌보드를 생성해 보세요";
+  const toastMessage = initialData
+    ? "빌보드를 업데이트 하였습니다."
+    : "빌보드를 생성 하였습니다.";
+  const action = initialData ? "수정" : "생성";
+
+  const form = useForm<BillboardFormValue>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData,
+    defaultValues: initialData || {
+      label: "",
+      imageUrl: "",
+    },
   });
 
-  const onSubmit = async (data: SettingsFormValue) => {
+  const onSubmit = async (data: BillboardFormValue) => {
     try {
       setLoading(true);
-      await axios.patch(`/api/stores/${params.storeId}`, data);
+      if (initialData) {
+        await axios.patch(
+          `/api/${params.storeId}/billboards/${params.billboardId}`,
+          data
+        );
+      } else {
+        await axios.post(`/api/${params.storeId}/billboards`, data);
+      }
       router.refresh();
-      toast.success("업데이트에 성공 하였습니다.");
+      toast.success(toastMessage);
     } catch (error) {
       toast.error("서버 오류가 발생 하였습니다.");
     } finally {
@@ -70,10 +93,12 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/stores/${params.storeId}`);
+      await axios.delete(
+        `/api/${params.storeId}/billboards/${params.billboardsId}`
+      );
       router.refresh();
       router.push("/");
-      toast.success("스토어가 삭제 되었습니다.");
+      toast.success("배너 이미지가 삭제 되었습니다.");
     } catch (error) {
       toast.error("서버 오류가 발생하였습니다.");
     } finally {
@@ -91,18 +116,17 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
         loading={loading}
       />
       <div className="w-full flex items-center justify-between">
-        <Heading
-          title="Settings"
-          description="선택한 스토어를 관리해 보세요."
-        />
-        <Button
-          disabled={loading}
-          variant={"destructive"}
-          size={"icon"}
-          onClick={() => setOpen(true)}
-        >
-          <Trash className="h-4 w-4" />
-        </Button>
+        <Heading title={title} description={description} />
+        {initialData && (
+          <Button
+            disabled={loading}
+            variant={"destructive"}
+            size={"icon"}
+            onClick={() => setOpen(true)}
+          >
+            <Trash className="h-4 w-4" />
+          </Button>
+        )}
       </div>
       <Separator />
       <Form {...form}>
@@ -110,17 +134,35 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full"
         >
+          <FormField
+            control={form.control}
+            name="imageUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>배너 이미지</FormLabel>
+                <FormControl>
+                  <ImageUpload
+                    value={field.value ? [field.value] : []}
+                    disabled={loading}
+                    onChange={(url) => field.onChange(url)}
+                    onRemove={() => field.onChange("")}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <div className="grid grid-cols-3 gap-8">
             <FormField
               control={form.control}
-              name="name"
+              name="label"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>스토어 명</FormLabel>
+                  <FormLabel>빌보드 이름</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="스토어 이름"
+                      placeholder="빌보드 이름을 입력하세요"
                       {...field}
                     />
                   </FormControl>
@@ -135,16 +177,11 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
             className="ml-auto"
             type="submit"
           >
-            저장
+            {action}
           </Button>
         </form>
       </Form>
       <Separator />
-      <ApiAlert
-        title="NEXT_PUBLIC_API_URL"
-        description={`${origin}/api/${params.storeId}`}
-        variant="public"
-      />
     </>
   );
 };

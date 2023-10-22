@@ -86,7 +86,7 @@ export const StoreModal = () => {
                 >
                   취소
                 </Button>
-                <Button disabled={loading} type="submit">
+                <Button variant={"main"} disabled={loading} type="submit">
                   확인
                 </Button>
               </div>
