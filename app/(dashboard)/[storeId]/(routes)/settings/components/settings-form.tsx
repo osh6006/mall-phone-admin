@@ -27,6 +27,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { AlertModal } from "@/components/modals/alert-modal";
+import { ApiAlert } from "@/components/ui/api-alert";
 
 interface SettingsFormProps {
   initialData: Store;
@@ -53,19 +55,44 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
   const onSubmit = async (data: SettingsFormValue) => {
     try {
       setLoading(true);
-      await axios.patch(`/api/store${params.storeId}`, data);
+      await axios.patch(`/api/stores/${params.storeId}`, data);
       router.refresh();
+      toast.success("업데이트에 성공 하였습니다.");
     } catch (error) {
-      toast.error("서버 오류가 발생하였습니다.");
+      toast.error("서버 오류가 발생 하였습니다.");
     } finally {
       setLoading(false);
     }
   };
 
+  const onDelete = async () => {
+    try {
+      setLoading(true);
+      await axios.delete(`/api/stores/${params.storeId}`);
+      router.refresh();
+      router.push("/");
+      toast.success("스토어가 삭제 되었습니다.");
+    } catch (error) {
+      toast.error("서버 오류가 발생하였습니다.");
+    } finally {
+      setLoading(false);
+      setOpen(false);
+    }
+  };
+
   return (
     <>
+      <AlertModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onConfirm={onDelete}
+        loading={loading}
+      />
       <div className="w-full flex items-center justify-between">
-        <Heading title="Settings" description="선택한 가게를 관리해 보세요." />
+        <Heading
+          title="Settings"
+          description="선택한 스토어를 관리해 보세요."
+        />
         <Button
           disabled={loading}
           variant={"destructive"}
@@ -105,6 +132,12 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
           </Button>
         </form>
       </Form>
+      <Separator />
+      <ApiAlert
+        title="NEXT_PUBLIC_API_URL"
+        description={`${origin}/api/${params.storeId}`}
+        variant="public"
+      />
     </>
   );
 };

@@ -19,7 +19,7 @@ const Navbar = async () => {
   });
 
   return (
-    <nav className="border-r w-72 flex flex-col relative p-4">
+    <nav className="border-r w-[300px] flex flex-col relative p-4">
       <div className="w-full flex justify-between items-center ">
         <div>
           <h1 className="font-semibold text-xl">Mall Phone</h1>

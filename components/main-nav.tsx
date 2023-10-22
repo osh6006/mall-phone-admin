@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { useParams, usePathname } from "next/navigation";
 
-import { Settings } from "lucide-react";
+import { LayoutDashboard, Settings } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -17,6 +17,12 @@ export function MainNav({
 
   const routes = [
     {
+      href: `/${params.storeId}`,
+      label: "OverView",
+      active: pathName === `/${params.storeId}`,
+      icon: <LayoutDashboard className=" h-5 w-5" />,
+    },
+    {
       href: `/${params.storeId}/settings`,
       label: "Settings",
       active: pathName === `/${params.storeId}/settings`,
@@ -25,12 +31,7 @@ export function MainNav({
   ];
 
   return (
-    <div
-      className={cn(
-        "flex flex-col justify-center space-x-4 lg:space-x-6",
-        className
-      )}
-    >
+    <div className={cn("flex flex-col justify-center gap-2", className)}>
       {routes.map((route) => (
         <Link
           key={route.href}

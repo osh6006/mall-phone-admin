@@ -10,7 +10,11 @@ const DashBoardPage: React.FC<DashBoardPageProps> = async ({ params }) => {
       id: params.storeId,
     },
   });
-  return <div>활성화 된 스토어: {store?.name}</div>;
+  return (
+    <div className="flex-1 w-full bg-red-700">
+      활성화 된 스토어: {store?.name}
+    </div>
+  );
 };
 
 export default DashBoardPage;
