@@ -5,7 +5,6 @@ import * as z from "zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams, useRouter } from "next/navigation";
-import { useOrigin } from "@/hooks/use-origin";
 
 import axios from "axios";
 
@@ -29,12 +28,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { AlertModal } from "@/components/modals/alert-modal";
-import { ApiAlert } from "@/components/ui/api-alert";
 import ImageUpload from "@/components/ui/image-upload";
 
 const formSchema = z.object({
   label: z.string().min(2, { message: "2글자 이상 입력해 주세요." }),
-  imageUrl: z.string().min(1),
+  imageURL: z.string().min(1),
 });
 
 type BillboardFormValue = z.infer<typeof formSchema>;
@@ -48,7 +46,6 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
 }) => {
   const params = useParams();
   const router = useRouter();
-  const origin = useOrigin();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -66,7 +63,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       label: "",
-      imageUrl: "",
+      imageURL: "",
     },
   });
 
@@ -82,6 +79,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
         await axios.post(`/api/${params.storeId}/billboards`, data);
       }
       router.refresh();
+      router.push(`/${params.storeId}/billboards`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("서버 오류가 발생 하였습니다.");
@@ -94,10 +92,10 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     try {
       setLoading(true);
       await axios.delete(
-        `/api/${params.storeId}/billboards/${params.billboardsId}`
+        `/api/${params.storeId}/billboards/${params.billboardId}`
       );
       router.refresh();
-      router.push("/");
+      router.push(`/${params.storeId}/billboards`);
       toast.success("배너 이미지가 삭제 되었습니다.");
     } catch (error) {
       toast.error("서버 오류가 발생하였습니다.");
@@ -136,7 +134,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
         >
           <FormField
             control={form.control}
-            name="imageUrl"
+            name="imageURL"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>배너 이미지</FormLabel>
