@@ -43,14 +43,14 @@ export function MainNav({
           key={route.href}
           href={route.href}
           className={cn(
-            "flex items-center gap-2 text-base font-medium transition-colors hover:text-primary px-3 py-2 border-2 border-transparent",
+            "flex items-center  text-base font-medium transition-colors hover:text-primary  p-2 border-2 border-transparent lg:gap-2 lg:px-3 lg:py-2",
             route.active
               ? "text-black dark:text-white border-inherit rounded-sm"
               : "text-muted-foreground "
           )}
         >
-          <>{route.icon}</>
-          <>{route.label}</>
+          <div className="mx-auto lg:m-0">{route.icon}</div>
+          <div className="hidden lg:block">{route.label}</div>
         </Link>
       ))}
     </div>

@@ -21,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="ko">
         <body className={inter.className}>
           <ToasterProvider />
           {/* MODAL을 GLOBAL 하게 보여줌 */}

@@ -60,13 +60,13 @@ const StoreSwitcher = ({ className, items = [] }: StoreSwitcherProps) => {
           role="combobox"
           aria-expanded={open}
           aria-label="스토어 선택"
-          className={cn("justify-between items-center", className)}
+          className={cn("flex justify-between items-center", className)}
         >
-          <div className="flex items-center gap-2">
+          <div className="hidden items-center gap-2 lg:flex">
             <StoreIcon className="h-4 w-4" />
-            <p className="text-sm font-semibold">{currentStore?.label}</p>
+            <p className="text-sm font-semibold ">{currentStore?.label}</p>
           </div>
-          <ChevronsUpDown className="ml-auto h-4 w-4  opacity-50" />
+          <ChevronsUpDown className="mx-auto  h-5 w-5 opacity-50 lg:m-0 " />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">

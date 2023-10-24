@@ -20,19 +20,31 @@ const Navbar = async () => {
   });
 
   return (
-    <nav className="border-r w-[300px] flex flex-col relative p-4">
-      <div className="w-full flex gap-x-4 items-center ">
-        <Image src="/Logo.png" width={40} height={40} alt="Logo" />
+    <nav
+      className="fixed w-[60px] h-full flex flex-col p-2 border-r
+      lg:w-[300px] lg:p-4
+    "
+    >
+      <div className="w-full flex  items-center mx-auto lg:gap-x-4 ">
+        <Image
+          className="mx-auto"
+          src="/Logo.png"
+          width={40}
+          height={40}
+          alt="Logo"
+        />
         <div>
-          <h1 className="font-semibold text-xl">Mall Phone Admin</h1>
+          <h1 className="hidden font-semibold text-xl lg:block">
+            Mall Phone Admin
+          </h1>
         </div>
       </div>
-      <StoreSwitcher items={stores} className="mt-5" />
-      <MainNav className="mt-3 mb-6" />
-      <div className="w-full flex justify-between items-center">
-        <div>
-          <h1 className="font-semibold text-xl">{`${user?.firstName} ${user?.lastName}`}</h1>
-        </div>
+      <div className="flex-1 w-full">
+        <StoreSwitcher items={stores} className="mt-5 w-full" />
+        <MainNav className="mt-3" />
+      </div>
+      <div className="flex mx-auto justify-between items-center lg:m-0">
+        <h1 className="hidden font-semibold text-xl lg:block">{`${user?.firstName} ${user?.lastName}`}</h1>
         <UserButton afterSignOutUrl="/" />
       </div>
     </nav>

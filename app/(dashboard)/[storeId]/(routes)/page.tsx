@@ -11,7 +11,7 @@ const DashBoardPage: React.FC<DashBoardPageProps> = async ({ params }) => {
     },
   });
   return (
-    <div className="flex-1 w-full bg-red-700">
+    <div className="flex-1 ml-[60px] lg:ml-[300px] w-full ">
       활성화 된 스토어: {store?.name}
     </div>
   );
