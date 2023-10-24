@@ -4,7 +4,13 @@ import Link from "next/link";
 
 import { useParams, usePathname } from "next/navigation";
 
-import { LayoutDashboard, Receipt, Settings } from "lucide-react";
+import {
+  Image as LucidImg,
+  LayoutDashboard,
+  Settings,
+  Grip,
+  TabletSmartphone,
+} from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -26,7 +32,19 @@ export function MainNav({
       href: `/${params.storeId}/billboards`,
       label: "Billboards",
       active: pathName === `/${params.storeId}/billboards`,
-      icon: <Receipt className=" h-5 w-5" />,
+      icon: <LucidImg className=" h-5 w-5" />,
+    },
+    {
+      href: `/${params.storeId}/categories`,
+      label: "Categories",
+      active: pathName === `/${params.storeId}/categories`,
+      icon: <Grip className=" h-5 w-5" />,
+    },
+    {
+      href: `/${params.storeId}/serises`,
+      label: "Serise",
+      active: pathName === `/${params.storeId}/serises`,
+      icon: <TabletSmartphone className=" h-5 w-5" />,
     },
     {
       href: `/${params.storeId}/settings`,

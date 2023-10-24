@@ -30,7 +30,7 @@ export const AlertModal: React.FC<AlertModalProps> = ({
   return (
     <Modal
       title="정말로 삭제 하시겠습니까?"
-      desc="삭제하시면 스토어를 되돌릴 수 없습니다."
+      desc="삭제하시면 데이터를 되돌리실 수 없습니다."
       isOpen={isOpen}
       onClose={onClose}
     >
