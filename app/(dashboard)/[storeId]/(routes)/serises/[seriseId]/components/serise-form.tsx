@@ -10,7 +10,7 @@ import axios from "axios";
 
 import toast from "react-hot-toast";
 
-import { BillBoard } from "@prisma/client";
+import { Serise } from "@prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Trash } from "lucide-react";
@@ -28,58 +28,55 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { AlertModal } from "@/components/modals/alert-modal";
-import ImageUpload from "@/components/ui/image-upload";
 
 const formSchema = z.object({
-  label: z.string().min(2, { message: "2글자 이상 입력해 주세요." }),
-  imageURL: z.string().min(1),
+  name: z.string().min(2, { message: "2글자 이상 입력해 주세요." }),
+  modelNum: z.string().min(8, { message: "8글자 이상 입력해 주세요." }),
 });
 
-type BillboardFormValue = z.infer<typeof formSchema>;
+type SeriseFormValue = z.infer<typeof formSchema>;
 
-interface BillboardFormProps {
-  initialData: BillBoard | null;
+interface SeriseFormProps {
+  initialData: Serise | null;
 }
 
-export const BillboardForm: React.FC<BillboardFormProps> = ({
-  initialData,
-}) => {
+export const SeriseForm: React.FC<SeriseFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData ? "빌보드 수정" : "빌보드 생성";
+  const title = initialData ? "시리즈 수정" : "시리즈 생성";
   const description = initialData
-    ? "빌보드 수정해 보세요"
-    : "새 빌보드를 생성해 보세요";
+    ? "시리즈 수정해 보세요"
+    : "새 시리즈를 생성해 보세요";
   const toastMessage = initialData
-    ? "빌보드를 업데이트 하였습니다."
-    : "빌보드를 생성 하였습니다.";
+    ? "시리즈를 업데이트 하였습니다."
+    : "시리즈를 생성 하였습니다.";
   const action = initialData ? "수정" : "생성";
 
-  const form = useForm<BillboardFormValue>({
+  const form = useForm<SeriseFormValue>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
-      label: "",
-      imageURL: "",
+      name: "",
+      modelNum: "",
     },
   });
 
-  const onSubmit = async (data: BillboardFormValue) => {
+  const onSubmit = async (data: SeriseFormValue) => {
     try {
       setLoading(true);
       if (initialData) {
         await axios.patch(
-          `/api/${params.storeId}/billboards/${params.billboardId}`,
+          `/api/${params.storeId}/serises/${params.seriseId}`,
           data
         );
       } else {
-        await axios.post(`/api/${params.storeId}/billboards`, data);
+        await axios.post(`/api/${params.storeId}/serises`, data);
       }
       router.refresh();
-      router.push(`/${params.storeId}/billboards`);
+      router.push(`/${params.storeId}/serises`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("서버 오류가 발생 하였습니다.");
@@ -91,12 +88,10 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(
-        `/api/${params.storeId}/billboards/${params.billboardId}`
-      );
+      await axios.delete(`/api/${params.storeId}/serises/${params.seriseId}`);
       router.refresh();
-      router.push(`/${params.storeId}/billboards`);
-      toast.success("배너 이미지가 삭제 되었습니다.");
+      router.push(`/${params.storeId}/serises`);
+      toast.success("시리즈가 삭제 되었습니다.");
     } catch (error) {
       toast.error("서버 오류가 발생하였습니다.");
     } finally {
@@ -132,35 +127,34 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full"
         >
-          <FormField
-            control={form.control}
-            name="imageURL"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>배너 이미지</FormLabel>
-                <FormControl>
-                  <ImageUpload
-                    value={field.value ? [field.value] : []}
-                    disabled={loading}
-                    onChange={(url) => field.onChange(url)}
-                    onRemove={() => field.onChange("")}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <div className="grid grid-cols-3 gap-8">
             <FormField
               control={form.control}
-              name="label"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>빌보드 이름</FormLabel>
+                  <FormLabel>시리즈 이름</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="빌보드 이름을 입력하세요"
+                      placeholder="시리즈 이름을 입력하세요"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="modelNum"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>모델 번호</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="모델 번호를 입력하세요"
                       {...field}
                     />
                   </FormControl>

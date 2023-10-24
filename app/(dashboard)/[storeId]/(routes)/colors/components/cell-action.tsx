@@ -9,17 +9,16 @@ import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { SeriseColumn } from "./columns";
+import { ColorColumn } from "./columns";
 import { Button } from "@/components/ui/button";
 import { DropdownMenuContent } from "@/components/ui/dropdown-menu";
 import { AlertModal } from "@/components/modals/alert-modal";
 
 interface CellActionProps {
-  data: SeriseColumn;
+  data: ColorColumn;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -37,9 +36,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/serises/${data.id}`);
+      await axios.delete(`/api/${params.storeId}/colors/${data.id}`);
       router.refresh();
-      toast.success("시리즈가 삭제 되었습니다.");
+      toast.success("Color가 삭제 되었습니다.");
     } catch (error) {
       toast.error("서버 오류가 발생하였습니다.");
     } finally {
@@ -70,7 +69,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             Id복사
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => router.push(`/${params.storeId}/serises/${data.id}`)}
+            onClick={() => router.push(`/${params.storeId}/colors/${data.id}`)}
           >
             <Edit className="mr-2 w-4 h-4" />
             수정하기

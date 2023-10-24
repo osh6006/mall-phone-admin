@@ -10,7 +10,7 @@ import axios from "axios";
 
 import toast from "react-hot-toast";
 
-import { BillBoard, Category } from "@prisma/client";
+import { Color } from "@prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Trash } from "lucide-react";
@@ -28,66 +28,58 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { AlertModal } from "@/components/modals/alert-modal";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "2글자 이상 입력해 주세요." }),
-  billboardId: z.string().min(1, { message: "배너를 선택해 주세요." }),
+  value: z
+    .string()
+    .min(4, { message: "4글자 이상 입력해 주세요" })
+    .regex(/^#/, { message: "hex 코드만 입력 가능합니다." }),
 });
 
-type CategoryFormValue = z.infer<typeof formSchema>;
+type ColorFormValue = z.infer<typeof formSchema>;
 
-interface CategoryFormProps {
-  initialData: Category | null;
-  billboards: BillBoard[];
+interface ColorFormProps {
+  initialData: Color | null;
 }
 
-export const CategoryForm: React.FC<CategoryFormProps> = ({
-  initialData,
-  billboards,
-}) => {
+export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData ? "카테고리 수정" : "카테고리 생성";
+  const title = initialData ? "Color 수정" : "Color 생성";
   const description = initialData
-    ? "카테고리 수정해 보세요"
-    : "새 카테고리를 생성해 보세요";
+    ? "Color 수정해 보세요"
+    : "새 Color를 생성해 보세요";
   const toastMessage = initialData
-    ? "카테고리를 업데이트 하였습니다."
-    : "카테고리를 생성 하였습니다.";
+    ? "Color를 업데이트 하였습니다."
+    : "Color를 생성 하였습니다.";
   const action = initialData ? "수정" : "생성";
 
-  const form = useForm<CategoryFormValue>({
+  const form = useForm<ColorFormValue>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       name: "",
-      billboardId: "",
+      value: "",
     },
   });
 
-  const onSubmit = async (data: CategoryFormValue) => {
+  const onSubmit = async (data: ColorFormValue) => {
     try {
       setLoading(true);
       if (initialData) {
         await axios.patch(
-          `/api/${params.storeId}/categories/${params.categoryId}`,
+          `/api/${params.storeId}/colors/${params.colorId}`,
           data
         );
       } else {
-        await axios.post(`/api/${params.storeId}/categories`, data);
+        await axios.post(`/api/${params.storeId}/colors`, data);
       }
       router.refresh();
-      router.push(`/${params.storeId}/categories`);
+      router.push(`/${params.storeId}/colors`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("서버 오류가 발생 하였습니다.");
@@ -99,12 +91,10 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(
-        `/api/${params.storeId}/categories/${params.categoryId}`
-      );
+      await axios.delete(`/api/${params.storeId}/colors/${params.colorId}`);
       router.refresh();
-      router.push(`/${params.storeId}/categories`);
-      toast.success("카테고리가 삭제 되었습니다.");
+      router.push(`/${params.storeId}/colors`);
+      toast.success("Color가 삭제 되었습니다.");
     } catch (error) {
       toast.error("서버 오류가 발생하였습니다.");
     } finally {
@@ -146,11 +136,11 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>카테고리 이름</FormLabel>
+                  <FormLabel>Color 이름</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="카테고리 이름을 입력하세요"
+                      placeholder="Color 이름을 입력하세요"
                       {...field}
                     />
                   </FormControl>
@@ -160,32 +150,23 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
             />
             <FormField
               control={form.control}
-              name="billboardId"
+              name="value"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>배너 이름</FormLabel>
-                  <Select
-                    disabled={loading}
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          defaultValue={field.value}
-                          placeholder="배너를 선택하세요"
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {billboards.map((billboard) => (
-                        <SelectItem key={billboard.id} value={billboard.id}>
-                          {billboard.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <FormLabel>색</FormLabel>
+                  <FormControl>
+                    <div className="flex items-center gap-x-3">
+                      <Input
+                        disabled={loading}
+                        placeholder="ex) #000000 or #fff"
+                        {...field}
+                      />
+                      <div
+                        className="border p-4 rounded-full"
+                        style={{ backgroundColor: field.value }}
+                      />
+                    </div>
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

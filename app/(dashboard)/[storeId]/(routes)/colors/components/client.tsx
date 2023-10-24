@@ -3,7 +3,7 @@ import { Plus } from "lucide-react";
 
 import { useParams, useRouter } from "next/navigation";
 
-import { SeriseColumn, columns } from "./columns";
+import { ColorColumn, columns } from "./columns";
 
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
@@ -12,7 +12,7 @@ import { ApiList } from "@/components/ui/api-list";
 import { DataTable } from "@/components/ui/data-table";
 
 interface SerisesClientProps {
-  data: SeriseColumn[];
+  data: ColorColumn[];
 }
 
 export default function SerisesClient({ data }: SerisesClientProps) {
@@ -23,12 +23,12 @@ export default function SerisesClient({ data }: SerisesClientProps) {
     <>
       <div className="flex items-center justify-between">
         <Heading
-          title={`Serises (${data?.length})`}
-          description="시리즈를 관리해 보세요"
+          title={`Colors (${data?.length})`}
+          description="스토어의 Color를 관리해 보세요."
         />
         <Button
           variant={"main"}
-          onClick={() => router.push(`/${params.storeId}/serises/new`)}
+          onClick={() => router.push(`/${params.storeId}/colors/new`)}
         >
           <Plus className="mr-2 w-4 h-4" />
           New
@@ -36,9 +36,9 @@ export default function SerisesClient({ data }: SerisesClientProps) {
       </div>
       <Separator />
       <DataTable columns={columns} data={data} searchKey="label" />
-      <Heading title="API" description="시리즈 관리 API Call" />
+      <Heading title="API" description="Colors 관리 API Call" />
       <Separator />
-      <ApiList entityName="serises" entityIdName="seriseId" />
+      <ApiList entityName="colors" entityIdName="colorId" />
     </>
   );
 }
