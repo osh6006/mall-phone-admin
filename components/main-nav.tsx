@@ -11,6 +11,7 @@ import {
   Grip,
   TabletSmartphone,
   Palette,
+  Box,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -52,6 +53,12 @@ export function MainNav({
       label: "Colors",
       active: pathName === `/${params.storeId}/colors`,
       icon: <Palette className=" h-5 w-5" />,
+    },
+    {
+      href: `/${params.storeId}/products`,
+      label: "Products",
+      active: pathName === `/${params.storeId}/products`,
+      icon: <Box className=" h-5 w-5" />,
     },
     {
       href: `/${params.storeId}/settings`,
