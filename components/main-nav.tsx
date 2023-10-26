@@ -12,6 +12,7 @@ import {
   TabletSmartphone,
   Palette,
   Box,
+  BaggageClaim,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -59,6 +60,12 @@ export function MainNav({
       label: "Products",
       active: pathName === `/${params.storeId}/products`,
       icon: <Box className=" h-5 w-5" />,
+    },
+    {
+      href: `/${params.storeId}/orders`,
+      label: "Orders",
+      active: pathName === `/${params.storeId}/orders`,
+      icon: <BaggageClaim className="w-5 h-5" />,
     },
     {
       href: `/${params.storeId}/settings`,
