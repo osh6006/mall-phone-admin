@@ -15,7 +15,7 @@ export default function OrderClient({ data }: OrderClientProps) {
     <>
       <Heading
         title={`주문 (${data?.length})`}
-        description="스토어 주문을 관리해 보세요."
+        description="스토어 주문 현황을 관리해 보세요."
       />
       <Separator />
       <DataTable columns={columns} data={data} searchKey="products" />
