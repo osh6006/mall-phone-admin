@@ -63,7 +63,7 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 403 });
     }
 
-    const serise = await prismadb.color.updateMany({
+    const storage = await prismadb.color.updateMany({
       where: {
         id: params.colorId,
       },
@@ -73,7 +73,7 @@ export async function PATCH(
       },
     });
 
-    return NextResponse.json(serise, { status: 200 });
+    return NextResponse.json(storage, { status: 200 });
   } catch (error) {
     console.log(`[COLOR_PATCH]`, error);
     return new NextResponse("Internal error ", { status: 500 });
@@ -107,13 +107,13 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 403 });
     }
 
-    const serise = await prismadb.color.deleteMany({
+    const storage = await prismadb.color.deleteMany({
       where: {
         id: params.colorId,
       },
     });
 
-    return NextResponse.json(serise, { status: 200 });
+    return NextResponse.json(storage, { status: 200 });
   } catch (error) {
     console.log(`[COLOR_DELETE]`, error);
     return new NextResponse("Internal error ", { status: 500 });

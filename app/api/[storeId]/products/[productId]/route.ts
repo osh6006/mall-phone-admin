@@ -19,7 +19,7 @@ export async function GET(
       include: {
         images: true,
         category: true,
-        serise: true,
+        storage: true,
         color: true,
       },
     });
@@ -44,7 +44,7 @@ export async function PATCH(
       price,
       categoryId,
       colorId,
-      seriseId,
+      storageId,
       images,
       isFeatured,
       isArchived,
@@ -70,8 +70,8 @@ export async function PATCH(
       return new NextResponse("CategoryId is required", { status: 400 });
     }
 
-    if (!seriseId) {
-      return new NextResponse("SeriseId is required", { status: 400 });
+    if (!storageId) {
+      return new NextResponse("StorageId is required", { status: 400 });
     }
 
     if (!colorId) {
@@ -105,7 +105,7 @@ export async function PATCH(
         isArchived,
         categoryId,
         colorId,
-        seriseId,
+        storageId,
         images: {
           deleteMany: {},
         },

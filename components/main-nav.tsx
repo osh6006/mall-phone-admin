@@ -44,9 +44,9 @@ export function MainNav({
       icon: <Grip className=" h-5 w-5" />,
     },
     {
-      href: `/${params.storeId}/serises`,
-      label: "Serise",
-      active: pathName === `/${params.storeId}/serises`,
+      href: `/${params.storeId}/storages`,
+      label: "Storage",
+      active: pathName === `/${params.storeId}/storages`,
       icon: <TabletSmartphone className=" h-5 w-5" />,
     },
     {

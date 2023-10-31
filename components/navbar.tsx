@@ -22,7 +22,7 @@ const Navbar = async () => {
   return (
     <nav
       className="fixed w-[60px] h-full flex flex-col p-2 border-r
-      lg:w-[300px] lg:p-4
+      lg:w-[300px] lg:p-4 z-50 bg-white
     "
     >
       <div className="w-full flex  items-center mx-auto lg:gap-x-4 ">

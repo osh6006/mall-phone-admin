@@ -10,7 +10,7 @@ import axios from "axios";
 
 import toast from "react-hot-toast";
 
-import { Category, Color, Image, Product, Serise } from "@prisma/client";
+import { Category, Color, Image, Product, Storage } from "@prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Trash } from "lucide-react";
@@ -44,7 +44,7 @@ const formSchema = z.object({
   images: z.object({ url: z.string() }).array(),
   price: z.coerce.number().min(1),
   categoryId: z.string().min(2, { message: "2글자 이상 입력해 주세요." }),
-  seriseId: z.string().min(2, { message: "2글자 이상 입력해 주세요." }),
+  storageId: z.string().min(2, { message: "2글자 이상 입력해 주세요." }),
   colorId: z.string().min(2, { message: "2글자 이상 입력해 주세요." }),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
@@ -55,14 +55,14 @@ type ProductFormValue = z.infer<typeof formSchema>;
 interface ProductFormProps {
   initialData: (Product & { images: Image[] }) | null;
   categories: Category[];
-  serises: Serise[];
+  storages: Storage[];
   colors: Color[];
 }
 
 export const ProductForm: React.FC<ProductFormProps> = ({
   initialData,
   colors,
-  serises,
+  storages,
   categories,
 }) => {
   const params = useParams();
@@ -93,7 +93,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           price: 0,
           categoryId: "",
           colorId: "",
-          seriseId: "",
+          storageId: "",
           isFeatured: false,
           isArchived: false,
         },
@@ -167,7 +167,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             name="images"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>상품 이미지</FormLabel>
+                <FormLabel>제품 이미지</FormLabel>
                 <FormControl>
                   <ImageUpload
                     value={field.value.map((image) => image.url)}
@@ -256,7 +256,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             />
             <FormField
               control={form.control}
-              name="seriseId"
+              name="storageId"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>시리즈 이름</FormLabel>
@@ -275,9 +275,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {serises.map((serise) => (
-                        <SelectItem key={serise.id} value={serise.id}>
-                          {serise.name}
+                      {storages.map((storage) => (
+                        <SelectItem key={storage.id} value={storage.id}>
+                          {storage.name}
                         </SelectItem>
                       ))}
                     </SelectContent>

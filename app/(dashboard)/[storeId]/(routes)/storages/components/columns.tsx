@@ -6,21 +6,16 @@ import { CellAction } from "./cell-action";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type SeriseColumn = {
+export type StorageColumn = {
   id: string;
   name: string;
-  modelNum: string;
   createdAt: string;
 };
 
-export const columns: ColumnDef<SeriseColumn>[] = [
+export const columns: ColumnDef<StorageColumn>[] = [
   {
     accessorKey: "name",
-    header: "이름",
-  },
-  {
-    accessorKey: "modelNum",
-    header: "모델 번호",
+    header: "용량",
   },
   {
     accessorKey: "createdAt",

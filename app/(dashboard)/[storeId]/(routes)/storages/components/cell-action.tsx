@@ -13,13 +13,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { SeriseColumn } from "./columns";
+import { StorageColumn } from "./columns";
 import { Button } from "@/components/ui/button";
 import { DropdownMenuContent } from "@/components/ui/dropdown-menu";
 import { AlertModal } from "@/components/modals/alert-modal";
 
 interface CellActionProps {
-  data: SeriseColumn;
+  data: StorageColumn;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -37,7 +37,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/serises/${data.id}`);
+      await axios.delete(`/api/${params.storeId}/storages/${data.id}`);
       router.refresh();
       toast.success("시리즈가 삭제 되었습니다.");
     } catch (error) {
@@ -70,7 +70,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             Id복사
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => router.push(`/${params.storeId}/serises/${data.id}`)}
+            onClick={() =>
+              router.push(`/${params.storeId}/storages/${data.id}`)
+            }
           >
             <Edit className="mr-2 w-4 h-4" />
             수정하기

@@ -10,7 +10,7 @@ import axios from "axios";
 
 import toast from "react-hot-toast";
 
-import { Serise } from "@prisma/client";
+import { Storage } from "@prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Trash } from "lucide-react";
@@ -28,55 +28,61 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { AlertModal } from "@/components/modals/alert-modal";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { StorageOptions } from "@/lib/data";
 
 const formSchema = z.object({
-  name: z.string().min(2, { message: "2글자 이상 입력해 주세요." }),
-  modelNum: z.string().min(8, { message: "8글자 이상 입력해 주세요." }),
+  name: z.string().min(2, { message: "스토리지를 선택해 주세요" }),
 });
 
-type SeriseFormValue = z.infer<typeof formSchema>;
+type StorageFormValue = z.infer<typeof formSchema>;
 
-interface SeriseFormProps {
-  initialData: Serise | null;
+interface StorageFormProps {
+  initialData: Storage | null;
 }
 
-export const SeriseForm: React.FC<SeriseFormProps> = ({ initialData }) => {
+export const StorageForm: React.FC<StorageFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData ? "시리즈 수정" : "시리즈 생성";
+  const title = initialData ? "스토리지 수정" : "스토리지 생성";
   const description = initialData
-    ? "시리즈 수정해 보세요"
-    : "새 시리즈를 생성해 보세요";
+    ? "스토리지 수정해 보세요"
+    : "새 스토리지를 생성해 보세요";
   const toastMessage = initialData
-    ? "시리즈를 업데이트 하였습니다."
-    : "시리즈를 생성 하였습니다.";
+    ? "스토리지를 업데이트 하였습니다."
+    : "스토리지를 생성 하였습니다.";
   const action = initialData ? "수정" : "생성";
 
-  const form = useForm<SeriseFormValue>({
+  const form = useForm<StorageFormValue>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       name: "",
-      modelNum: "",
     },
   });
 
-  const onSubmit = async (data: SeriseFormValue) => {
+  const onSubmit = async (data: StorageFormValue) => {
     try {
       setLoading(true);
       if (initialData) {
         await axios.patch(
-          `/api/${params.storeId}/serises/${params.seriseId}`,
+          `/api/${params.storeId}/storages/${params.storageId}`,
           data
         );
       } else {
-        await axios.post(`/api/${params.storeId}/serises`, data);
+        await axios.post(`/api/${params.storeId}/storages`, data);
       }
       router.refresh();
-      router.push(`/${params.storeId}/serises`);
+      router.push(`/${params.storeId}/storages`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("서버 오류가 발생 하였습니다.");
@@ -88,10 +94,10 @@ export const SeriseForm: React.FC<SeriseFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/serises/${params.seriseId}`);
+      await axios.delete(`/api/${params.storeId}/storages/${params.storageId}`);
       router.refresh();
-      router.push(`/${params.storeId}/serises`);
-      toast.success("시리즈가 삭제 되었습니다.");
+      router.push(`/${params.storeId}/storages`);
+      toast.success("스토리지가 삭제 되었습니다.");
     } catch (error) {
       toast.error("서버 오류가 발생하였습니다.");
     } finally {
@@ -133,31 +139,30 @@ export const SeriseForm: React.FC<SeriseFormProps> = ({ initialData }) => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>시리즈 이름</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="시리즈 이름을 입력하세요"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="modelNum"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>모델 번호</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="모델 번호를 입력하세요"
-                      {...field}
-                    />
-                  </FormControl>
+                  <FormLabel>스토리지 용량</FormLabel>
+
+                  <Select
+                    disabled={loading}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="스토리지를 선택하세요"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {StorageOptions.map((storage) => (
+                        <SelectItem key={storage.value} value={storage.value}>
+                          {storage.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

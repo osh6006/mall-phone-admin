@@ -3,7 +3,7 @@ import { Plus } from "lucide-react";
 
 import { useParams, useRouter } from "next/navigation";
 
-import { SeriseColumn, columns } from "./columns";
+import { StorageColumn, columns } from "./columns";
 
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
@@ -11,11 +11,11 @@ import { Separator } from "@/components/ui/separator";
 import { ApiList } from "@/components/ui/api-list";
 import { DataTable } from "@/components/ui/data-table";
 
-interface SerisesClientProps {
-  data: SeriseColumn[];
+interface StoragesClientProps {
+  data: StorageColumn[];
 }
 
-export default function SerisesClient({ data }: SerisesClientProps) {
+export default function StoragesClient({ data }: StoragesClientProps) {
   const router = useRouter();
   const params = useParams();
 
@@ -23,12 +23,12 @@ export default function SerisesClient({ data }: SerisesClientProps) {
     <>
       <div className="flex items-center justify-between">
         <Heading
-          title={`Serises (${data?.length})`}
-          description="시리즈를 관리해 보세요"
+          title={`Storages (${data?.length})`}
+          description="스토리지를 관리해 보세요"
         />
         <Button
           variant={"main"}
-          onClick={() => router.push(`/${params.storeId}/serises/new`)}
+          onClick={() => router.push(`/${params.storeId}/storages/new`)}
         >
           <Plus className="mr-2 w-4 h-4" />
           New
@@ -38,7 +38,7 @@ export default function SerisesClient({ data }: SerisesClientProps) {
       <DataTable columns={columns} data={data} searchKey="label" />
       <Heading title="API" description="시리즈 관리 API Call" />
       <Separator />
-      <ApiList entityName="serises" entityIdName="seriseId" />
+      <ApiList entityName="storages" entityIdName="storageId" />
     </>
   );
 }

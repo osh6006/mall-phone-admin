@@ -16,7 +16,7 @@ model Store {
   userId      String
   billboards  BillBoard[] @relation("StoreToBillboard")
   categories  Category[]  @relation("StoreToCategory")
-  series      Serise[]    @relation("StoreToSerise")
+  series      Storage[]    @relation("StoreToStorage")
   color       Color[]     @relation("StoreToColor")
   products    Product[]   @relation("StoreToProduct")
   orders      Order[]     @relation("StoreToOrder")
@@ -52,13 +52,12 @@ model Category{
   @@index([billboardId])
 }
 
-model Serise{
+model Storage{
   id          String    @id   @default(uuid())
   storeId     String
-  store       Store     @relation("StoreToSerise", fields: [storeId], references: [id])
+  store       Store     @relation("StoreToStorage", fields: [storeId], references: [id])
   name        String
-  modelNum    String
-  products    Product[] @relation("SeriseToProduct")
+  products    Product[] @relation("StorageToProduct")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
@@ -88,8 +87,8 @@ model Product{
   price       Decimal
   isFeatured  Boolean   @default(false)
   isArchived  Boolean   @default(false)
-  seriseId    String
-  serise      Serise    @relation("SeriseToProduct", fields: [seriseId],references: [id])
+  storageId   String
+  storage     Storage    @relation("StorageToProduct", fields: [storageId],references: [id])
   colorId     String
   color       Color     @relation("ColorToProduct", fields: [colorId], references: [id])
   images      Image[]   @relation("ProductToImage")
@@ -99,7 +98,7 @@ model Product{
 
   @@index([storeId])
   @@index([categoryId])
-  @@index([seriseId])
+  @@index([storageId])
   @@index([colorId])
 }
 

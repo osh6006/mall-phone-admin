@@ -5,35 +5,35 @@ import prismadb from "@/lib/prismadb";
 
 export async function GET(
   req: Request,
-  { params }: { params: { seriseId: string } }
+  { params }: { params: { storageId: string } }
 ) {
   try {
-    if (!params.seriseId) {
-      return new NextResponse("SeriseId id is required", { status: 400 });
+    if (!params.storageId) {
+      return new NextResponse("StorageId id is required", { status: 400 });
     }
 
-    const serise = await prismadb.serise.findUnique({
+    const storage = await prismadb.storage.findUnique({
       where: {
-        id: params.seriseId,
+        id: params.storageId,
       },
     });
 
-    return NextResponse.json(serise, { status: 200 });
+    return NextResponse.json(storage, { status: 200 });
   } catch (error) {
-    console.log(`[SERISE_GET]`, error);
+    console.log(`[STORAGE_GET]`, error);
     return new NextResponse("Internal error ", { status: 500 });
   }
 }
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { storeId: string; seriseId: string } }
+  { params }: { params: { storeId: string; storageId: string } }
 ) {
   try {
     const { userId } = auth();
     const body = await req.json();
 
-    const { name, modelNum } = body;
+    const { name } = body;
 
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 401 });
@@ -43,12 +43,8 @@ export async function PATCH(
       return new NextResponse("Name is required", { status: 400 });
     }
 
-    if (!modelNum) {
-      return new NextResponse("ModelNum is required", { status: 400 });
-    }
-
-    if (!params.seriseId) {
-      return new NextResponse("SeriseId id is required", { status: 400 });
+    if (!params.storageId) {
+      return new NextResponse("StorageId id is required", { status: 400 });
     }
 
     const storeByUserId = await prismadb.store.findFirst({
@@ -63,26 +59,25 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 403 });
     }
 
-    const serise = await prismadb.serise.updateMany({
+    const storage = await prismadb.storage.updateMany({
       where: {
-        id: params.seriseId,
+        id: params.storageId,
       },
       data: {
         name,
-        modelNum,
       },
     });
 
-    return NextResponse.json(serise, { status: 200 });
+    return NextResponse.json(storage, { status: 200 });
   } catch (error) {
-    console.log(`[SERISE_PATCH]`, error);
+    console.log(`[STORAGE_PATCH]`, error);
     return new NextResponse("Internal error ", { status: 500 });
   }
 }
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { storeId: string; seriseId: string } }
+  { params }: { params: { storeId: string; storageId: string } }
 ) {
   try {
     const { userId } = auth();
@@ -91,8 +86,8 @@ export async function DELETE(
       return new NextResponse("Unauthenticated", { status: 401 });
     }
 
-    if (!params.seriseId) {
-      return new NextResponse("Serise id is required", { status: 400 });
+    if (!params.storageId) {
+      return new NextResponse("Storage id is required", { status: 400 });
     }
 
     const storeByUserId = await prismadb.store.findFirst({
@@ -107,15 +102,15 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 403 });
     }
 
-    const serise = await prismadb.serise.deleteMany({
+    const storage = await prismadb.storage.deleteMany({
       where: {
-        id: params.seriseId,
+        id: params.storageId,
       },
     });
 
-    return NextResponse.json(serise, { status: 200 });
+    return NextResponse.json(storage, { status: 200 });
   } catch (error) {
-    console.log(`[SERISE_DELETE]`, error);
+    console.log(`[STORAGE_DELETE]`, error);
     return new NextResponse("Internal error ", { status: 500 });
   }
 }

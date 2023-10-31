@@ -11,7 +11,7 @@ export async function POST(
     const { userId } = auth();
     const body = await request.json();
 
-    const { name, modelNum } = body;
+    const { name } = body;
 
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 401 });
@@ -19,10 +19,6 @@ export async function POST(
 
     if (!name) {
       return new NextResponse("Name is required", { status: 400 });
-    }
-
-    if (!modelNum) {
-      return new NextResponse("ModelNum is required", { status: 400 });
     }
 
     if (!params.storeId) {
@@ -41,17 +37,16 @@ export async function POST(
       return new NextResponse("Unauthorized", { status: 403 });
     }
 
-    const serise = await prismadb.serise.create({
+    const storage = await prismadb.storage.create({
       data: {
         name,
-        modelNum,
         storeId: params.storeId,
       },
     });
 
-    return NextResponse.json(serise, { status: 200 });
+    return NextResponse.json(storage, { status: 200 });
   } catch (error) {
-    console.log("[SERISE_POST]", error);
+    console.log("[STORAGE_POST]", error);
     return new NextResponse("Interal error", { status: 500 });
   }
 }
@@ -65,15 +60,15 @@ export async function GET(
       return new NextResponse("StoreId is required", { status: 400 });
     }
 
-    const serises = await prismadb.serise.findMany({
+    const storages = await prismadb.storage.findMany({
       where: {
         storeId: params.storeId,
       },
     });
 
-    return NextResponse.json(serises, { status: 200 });
+    return NextResponse.json(storages, { status: 200 });
   } catch (error) {
-    console.log("[SERISES_GET]", error);
+    console.log("[STORAGES_GET]", error);
     return new NextResponse("Interal error", { status: 500 });
   }
 }

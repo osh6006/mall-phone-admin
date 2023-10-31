@@ -23,7 +23,7 @@ const ProductPage = async ({
     },
   });
 
-  const serises = await prismadb.serise.findMany({
+  const storages = await prismadb.storage.findMany({
     where: {
       storeId: params.storeId,
     },
@@ -41,7 +41,7 @@ const ProductPage = async ({
         <ProductForm
           categories={categories}
           colors={colors}
-          serises={serises}
+          storages={storages}
           initialData={product}
         />
       </div>

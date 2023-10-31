@@ -16,7 +16,7 @@ export async function POST(
       price,
       categoryId,
       colorId,
-      seriseId,
+      storageId,
       images,
       isFeatured,
       isArchived,
@@ -42,8 +42,8 @@ export async function POST(
       return new NextResponse("CategoryId is required", { status: 400 });
     }
 
-    if (!seriseId) {
-      return new NextResponse("SeriseId is required", { status: 400 });
+    if (!storageId) {
+      return new NextResponse("StorageId is required", { status: 400 });
     }
 
     if (!colorId) {
@@ -74,7 +74,7 @@ export async function POST(
         isArchived,
         categoryId,
         colorId,
-        seriseId,
+        storageId,
         storeId: params.storeId,
         images: {
           createMany: {
@@ -99,7 +99,7 @@ export async function GET(
     const { searchParams } = new URL(request.url);
     const categoryId = searchParams.get("categoryId") || undefined;
     const colorId = searchParams.get("colorId") || undefined;
-    const seriseId = searchParams.get("seriseId") || undefined;
+    const storageId = searchParams.get("storageId") || undefined;
     const isFeatured = searchParams.get("isFeatured");
 
     if (!params.storeId) {
@@ -111,7 +111,7 @@ export async function GET(
         storeId: params.storeId,
         categoryId,
         colorId,
-        seriseId,
+        storageId,
         isFeatured: isFeatured ? true : undefined,
         isArchived: false,
       },
@@ -119,7 +119,7 @@ export async function GET(
         images: true,
         category: true,
         color: true,
-        serise: true,
+        storage: true,
       },
       orderBy: {
         createdAt: "desc",

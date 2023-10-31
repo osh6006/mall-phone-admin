@@ -11,11 +11,11 @@ import { Separator } from "@/components/ui/separator";
 import { ApiList } from "@/components/ui/api-list";
 import { DataTable } from "@/components/ui/data-table";
 
-interface SerisesClientProps {
+interface StoragesClientProps {
   data: ColorColumn[];
 }
 
-export default function SerisesClient({ data }: SerisesClientProps) {
+export default function StoragesClient({ data }: StoragesClientProps) {
   const router = useRouter();
   const params = useParams();
 
