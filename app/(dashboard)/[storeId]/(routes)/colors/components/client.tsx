@@ -11,11 +11,11 @@ import { Separator } from "@/components/ui/separator";
 import { ApiList } from "@/components/ui/api-list";
 import { DataTable } from "@/components/ui/data-table";
 
-interface StoragesClientProps {
+interface ColorsClientProps {
   data: ColorColumn[];
 }
 
-export default function StoragesClient({ data }: StoragesClientProps) {
+export default function ColorsClient({ data }: ColorsClientProps) {
   const router = useRouter();
   const params = useParams();
 
@@ -35,7 +35,7 @@ export default function StoragesClient({ data }: StoragesClientProps) {
         </Button>
       </div>
       <Separator />
-      <DataTable columns={columns} data={data} searchKey="label" />
+      <DataTable columns={columns} data={data} searchKey="name" />
       <Heading title="API" description="Colors 관리 API Call" />
       <Separator />
       <ApiList entityName="colors" entityIdName="colorId" />

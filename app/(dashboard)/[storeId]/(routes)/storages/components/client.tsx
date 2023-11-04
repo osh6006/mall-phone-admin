@@ -35,7 +35,7 @@ export default function StoragesClient({ data }: StoragesClientProps) {
         </Button>
       </div>
       <Separator />
-      <DataTable columns={columns} data={data} searchKey="label" />
+      <DataTable columns={columns} data={data} searchKey="name" />
       <Heading title="API" description="시리즈 관리 API Call" />
       <Separator />
       <ApiList entityName="storages" entityIdName="storageId" />
